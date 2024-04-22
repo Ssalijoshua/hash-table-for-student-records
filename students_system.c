@@ -24,7 +24,7 @@ int hashFunction(int studentNumber) {
     return studentNumber % HASH_TABLE_SIZE;
 }
 
-// For inserting a student to the table
+// For inserting a student to the table as the head
 void insert(HashTable hashTable[], Student *student) {
     int index = hashFunction(student->studentNumber);
     student->next = hashTable[index].head;
@@ -178,10 +178,10 @@ void exportToCSV(HashTable hashTable[], const char *filename) {
         return;
     }
 
-    // Write header row
+    // Customising header row
     fprintf(file, "Name,Student Number,Course,Date of Birth,Tuition\n");
 
-    // Write student data from hash table to CSV
+    // Writing student data from hash table to CSV
     for (int i = 0; i < HASH_TABLE_SIZE; i++) {
         Student *current = hashTable[i].head;
         while (current != NULL) {
@@ -225,11 +225,11 @@ int main() {
 
                 printf("\nEnter Student Details:\n");
                 printf("Name: ");
-                scanf(" %[^\n]s", student->name);  // Read the name (with spaces)
+                scanf(" %[^\n]s", student->name);  
                 printf("Student Number: ");
                 scanf("%d", &student->studentNumber);
                 printf("Course: ");
-                scanf(" %[^\n]s", student->course);  // Read the course (with spaces)
+                scanf(" %[^\n]s", student->course);  // [^\n] reads the course with spaces
                 printf("Date of Birth (yyyy/mm/dd): ");
                 scanf("%s", student->dateOfBirth);
                 printf("Tuition Amount: ");
@@ -239,7 +239,7 @@ int main() {
                 insert(hashTable, student);  // Insert the student into the hash table
                 printf("Student added successfully.\n");
                 }
-                // Option to create a new student 
+               
                 break;
             case 2:
                 {
@@ -298,7 +298,7 @@ int main() {
             case 4:
                 {
                     int updateNumber;
-                    printf("Enter student number to update details: ");
+                    printf("Enter the student number whose details you want to update: ");
                     scanf("%d", &updateNumber);
                     updateStudentDetails(hashTable, updateNumber);
                     break;
@@ -306,7 +306,7 @@ int main() {
             case 5:
                 {
                     char filename[100];
-                    printf("Enter filename for export: ");
+                    printf("Enter CSV filename : ");
                     scanf(" %[^\n]", filename);
                     exportToCSV(hashTable, filename);
                     break;
