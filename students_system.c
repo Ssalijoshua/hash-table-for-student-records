@@ -41,7 +41,7 @@ void printHashTable(HashTable hashTable[]) {
             printf(" %s -> ", current->name);
             current = current->next;
         }
-        printf("NULL\n");
+        printf("<-->\n");
     }
 }
 
