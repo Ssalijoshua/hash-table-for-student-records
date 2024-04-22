@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #define HASH_TABLE_SIZE 10
 
+// struct for student
 typedef struct Student {
     char name[50];
     int studentNumber;
@@ -13,6 +15,7 @@ typedef struct Student {
     struct Student *next;
 } Student;
 
+// initialising the table to store a head pointer
 typedef struct {
     Student *head;
 } HashTable;
@@ -21,12 +24,14 @@ int hashFunction(int studentNumber) {
     return studentNumber % HASH_TABLE_SIZE;
 }
 
+// For inserting a student to the table
 void insert(HashTable hashTable[], Student *student) {
     int index = hashFunction(student->studentNumber);
     student->next = hashTable[index].head;
     hashTable[index].head = student;
 }
 
+// For printing the hash table
 void printHashTable(HashTable hashTable[]) {
     printf("Hash Table Contents:\n");
     for (int i = 0; i < HASH_TABLE_SIZE; i++) {
@@ -210,7 +215,31 @@ int main() {
 
         switch (choice) {
             case 1:
-                // Option to create a new student (similar to existing implementation)
+                {
+                    // Create a new student
+                Student *student = (Student*)malloc(sizeof(Student));
+                if (student == NULL) {
+                    printf("Memory allocation failed.\n");
+                    exit(EXIT_FAILURE);
+                }
+
+                printf("\nEnter Student Details:\n");
+                printf("Name: ");
+                scanf(" %[^\n]s", student->name);  // Read the name (with spaces)
+                printf("Student Number: ");
+                scanf("%d", &student->studentNumber);
+                printf("Course: ");
+                scanf(" %[^\n]s", student->course);  // Read the course (with spaces)
+                printf("Date of Birth (yyyy/mm/dd): ");
+                scanf("%s", student->dateOfBirth);
+                printf("Tuition Amount: ");
+                scanf("%f", &student->tuition);
+
+                student->next = NULL; // Initialize next pointer to NULL
+                insert(hashTable, student);  // Insert the student into the hash table
+                printf("Student added successfully.\n");
+                }
+                // Option to create a new student 
                 break;
             case 2:
                 {
@@ -283,7 +312,7 @@ int main() {
                     break;
                 }
             case 6:
-                // Option to print the hash table (similar to existing implementation)
+                    printHashTable(hashTable);
                 break;
             case 7:
                 printf("Exiting...\n");
@@ -299,9 +328,9 @@ int main() {
                 }
                 break;
             default:
-                printf("Invalid choice. Please try again.\n");
+                printf("############### Invalid choice. Please try again. ####################\n");
         }
-    } while (choice != 7);
+    } while (true);
 
     return 0;
 }
