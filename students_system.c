@@ -8,7 +8,7 @@
 // struct for student
 typedef struct Student {
     char name[50];
-    int studentNumber;
+    int reg_number;
     char course[50];
     char dateOfBirth[11];
     float tuition;
@@ -20,13 +20,13 @@ typedef struct {
     Student *head;
 } HashTable;
 
-int hashFunction(int studentNumber) {
-    return studentNumber % HASH_TABLE_SIZE;
+int hashFunction(int reg_number) {
+    return reg_number % HASH_TABLE_SIZE;
 }
 
 // For inserting a student to the table as the head
 void insert(HashTable hashTable[], Student *student) {
-    int index = hashFunction(student->studentNumber);
+    int index = hashFunction(student->reg_number);
     student->next = hashTable[index].head;
     hashTable[index].head = student;
 }
@@ -45,12 +45,12 @@ void printHashTable(HashTable hashTable[]) {
     }
 }
 
-Student* searchStudent(HashTable hashTable[], int studentNumber, const char *name) {
-    int index = hashFunction(studentNumber);
+Student* searchStudent(HashTable hashTable[], int reg_number, const char *name) {
+    int index = hashFunction(reg_number);
     Student *current = hashTable[index].head;
 
     while (current != NULL) {
-        if (current->studentNumber == studentNumber || strcmp(current->name, name) == 0) {
+        if (current->reg_number == reg_number || strcmp(current->name, name) == 0) {
             return current; 
         }
         current = current->next;
@@ -59,27 +59,27 @@ Student* searchStudent(HashTable hashTable[], int studentNumber, const char *nam
     return NULL;
 }
 
-void deleteStudentByNumber(HashTable hashTable[], int studentNumber) {
-    int index = hashFunction(studentNumber);
+void deleteStudentByNumber(HashTable hashTable[], int reg_number) {
+    int index = hashFunction(reg_number);
     Student *current = hashTable[index].head;
     Student *prev = NULL;
 
     while (current != NULL) {
-        if (current->studentNumber == studentNumber) {
+        if (current->reg_number == reg_number) {
             if (prev == NULL) {
                 hashTable[index].head = current->next;
             } else {
                 prev->next = current->next;
             }
             free(current); 
-            printf("Student with student number %d deleted successfully.\n", studentNumber);
+            printf("Student with student number %d deleted successfully.\n", reg_number);
             return;
         }
         prev = current;
         current = current->next;
     }
 
-    printf("Student with student number %d not found.\n", studentNumber);
+    printf("Student with student number %d not found.\n", reg_number);
 }
 
 void deleteStudentByName(HashTable hashTable[], const char *name) {
@@ -106,10 +106,10 @@ void deleteStudentByName(HashTable hashTable[], const char *name) {
     printf("Student with name '%s' not found.\n", name);
 }
 
-void updateStudentDetails(HashTable hashTable[], int studentNumber) {
-    Student *student = searchStudent(hashTable, studentNumber, "");
+void updateStudentDetails(HashTable hashTable[], int reg_number) {
+    Student *student = searchStudent(hashTable, reg_number, "");
     if (student == NULL) {
-        printf("Student with student number %d not found.\n", studentNumber);
+        printf("Student with student number %d not found.\n", reg_number);
         return;
     }
 
@@ -148,7 +148,7 @@ void sortByName(HashTable hashTable[]) {
     }
 }
 
-void sortByStudentNumber(HashTable hashTable[]) {
+void sortByreg_number(HashTable hashTable[]) {
     for (int i = 0; i < HASH_TABLE_SIZE; i++) {
         Student *current = hashTable[i].head;
         int swapped;
@@ -156,7 +156,7 @@ void sortByStudentNumber(HashTable hashTable[]) {
         do {
             swapped = 0;
             while (current != NULL && current->next != NULL) {
-                if (current->studentNumber > current->next->studentNumber) {
+                if (current->reg_number > current->next->reg_number) {
                     // Swap nodes
                     Student *temp = current;
                     hashTable[i].head = current->next;
@@ -186,7 +186,7 @@ void exportToCSV(HashTable hashTable[], const char *filename) {
         Student *current = hashTable[i].head;
         while (current != NULL) {
             fprintf(file, "%s,%d,%s,%s,%.2f\n",
-                    current->name, current->studentNumber,
+                    current->name, current->reg_number,
                     current->course, current->dateOfBirth,
                     current->tuition);
             current = current->next;
@@ -227,7 +227,7 @@ int main() {
                 printf("Name: ");
                 scanf(" %[^\n]s", student->name);  
                 printf("Student Number: ");
-                scanf("%d", &student->studentNumber);
+                scanf("%d", &student->reg_number);
                 printf("Course: ");
                 scanf(" %[^\n]s", student->course);  // [^\n] reads the course with spaces
                 printf("Date of Birth (yyyy/mm/dd): ");
@@ -256,7 +256,7 @@ int main() {
                             printf("Hash table sorted by name.\n");
                             break;
                         case 2:
-                            sortByStudentNumber(hashTable);
+                            sortByreg_number(hashTable);
                             printf("Hash table sorted by student number.\n");
                             break;
                         default:
